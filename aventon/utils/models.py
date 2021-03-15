@@ -1,7 +1,7 @@
 """Django models utilities"""
 
-# Django
 from django.db import models
+
 
 class MetaModel(models.Model):
     """Metadata base model
@@ -28,6 +28,5 @@ class MetaModel(models.Model):
         """Meta option."""
 
         abstract = True
-
-        get_lasted_by = 'created'
-        orderinng = ['-created', '-modified']
+        get_latest_by = 'created'
+        ordering = ['-created', '-modified']
