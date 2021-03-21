@@ -1,5 +1,5 @@
 from django.contrib import admin
-from aventon.circles.models import Circle
+from .models.circles import Circle
 
 
 @admin.register(Circle)
