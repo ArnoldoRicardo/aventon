@@ -16,12 +16,8 @@ def list_circles(request):
 
     elif request.method == 'POST':
         """Create circle"""
-        data = [request.data, request.data]
-        circles = []
-        for d in data:
-            serializer = CreateCircleSerializer(data=d)
-            serializer.is_valid(raise_exception=True)
-            circle = serializer.save()
-            circles.append(circle)
+        serializer = CreateCircleSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        circle = serializer.save()
 
-        return Response(CircleSerializer(circles, many=True).data)
+        return Response(CircleSerializer(circle).data)

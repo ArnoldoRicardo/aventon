@@ -18,4 +18,5 @@ class CreateCircleSerializer(serializers.Serializer):
     about = serializers.CharField(max_length=255, required=False)
 
     def create(self, validated_data):
+        """Create circle."""
         return Circle.objects.create(**validated_data)
