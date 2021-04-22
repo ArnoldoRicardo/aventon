@@ -43,7 +43,8 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 LOCAL_APPS = [
     'aventon.users.apps.UsersConfig',
