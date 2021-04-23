@@ -1,13 +1,18 @@
+from django.conf import settings
 from django.contrib.auth import authenticate, password_validation
 from django.core.validators import RegexValidator
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from rest_framework.authtoken.models import Token
 
 from aventon.users.models import User, Profile
+
+import jwt
+from datetime import timedelta
 
 
 class UserModelSerializer(serializers.ModelSerializer):
@@ -105,4 +110,11 @@ class UserSignUpSerializer(serializers.Serializer):
 
     def gen_verification_token(self, user):
         """Create JWT token that user can use to verify its account."""
-        return 'abc'
+        exp_data = timezone.now() + timedelta(days=3)
+        payload = {
+            'user': user.username,
+            'exp': int(exp_data.timestamp()),
+            'type': 'email_confirmation',
+        }
+        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+        return token

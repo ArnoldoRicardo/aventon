@@ -15,7 +15,7 @@ djangorestframework==3.11.1
 django-filter==2.3.0 #borrar esta liberia si no se usa
 
 # JWT
-pyjwt==1.7.1
+pyjwt==2.0.1
 
 # Passwords security
 argon2-cffi==20.1.0
