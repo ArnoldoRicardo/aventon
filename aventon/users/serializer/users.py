@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, password_validation
 from django.core.validators import RegexValidator
-from django.db import IntegrityError
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -33,6 +34,8 @@ class UserLoginSerializer(serializers.Serializer):
         user = authenticate(username=data['email'], password=data['password'])
         if not user:
             raise serializers.ValidationError('Invalid credentials.')
+        if not user.is_verified:
+            raise serializers.ValidationError('Account is not active yet.')
         self.context['user'] = user
         return data
 
@@ -63,8 +66,8 @@ class UserSignUpSerializer(serializers.Serializer):
         message="""Phone number must be entered in the format +999999999. Up to 15 digits allowed."""
     )
     phone_number = serializers.CharField(
-        validators = [phone_regex],
-        max_length = 17,
+        validators=[phone_regex],
+        max_length=17,
     )
 
     password = serializers.CharField(min_length=6, max_length=64)
@@ -81,9 +84,25 @@ class UserSignUpSerializer(serializers.Serializer):
             raise serializers.ValidationError("Passwords don't math.")
         password_validation.validate_password(password)
         return data
-    
+
     def create(self, data):
         """Handle user and profile creation."""
         data.pop('password_confirmation')
-        user = User.objects.create_user(**data)
+        user = User.objects.create_user(**data, is_verified=False)
+        self.send_confirmation_email(user)
         return user
+
+    def send_confirmation_email(self, user):
+        """Send account verication link to given user."""
+        verification_token = self.gen_verification_token(user)
+        subject = 'Welcome @{}! Verify your account to start ussing this app.'.format(user.username)
+        from_email = 'Aventon <noreply@arnoldoricardo.com>'
+        content = render_to_string('emails/users/account/verification.html',
+                                   {'token': verification_token, 'user': user})
+        msg = EmailMultiAlternatives(subject, content, from_email, [user.email])
+        msg.attach_alternative(content, 'text/html')
+        msg.send()
+
+    def gen_verification_token(self, user):
+        """Create JWT token that user can use to verify its account."""
+        return 'abc'

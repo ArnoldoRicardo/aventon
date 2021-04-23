@@ -66,10 +66,10 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [  # noqa F405
 # Email
 DEFAULT_FROM_EMAIL = env(
     'DJANGO_DEFAULT_FROM_EMAIL',
-    default='Comparte Ride <noreply@comparteride.com>'
+    default='ar <noreply@arnoldoricardo.com>'
 )
 SERVER_EMAIL = env('DJANGO_SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
-EMAIL_SUBJECT_PREFIX = env('DJANGO_EMAIL_SUBJECT_PREFIX', default='[Comparte Ride]')
+EMAIL_SUBJECT_PREFIX = env('DJANGO_EMAIL_SUBJECT_PREFIX', default='[aventon]')
 
 # Admin
 ADMIN_URL = env('DJANGO_ADMIN_URL')
