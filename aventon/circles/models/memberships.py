@@ -1,5 +1,4 @@
 """ Membership model. """
-rides_taken
 from django.db import models
 
 from aventon.utils.models import MetaModel
