@@ -1,7 +1,11 @@
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import circles as circles_views
 
-from .views import list_circles
+
+router = DefaultRouter()
+router.register(r'circles', circles_views.CircleViewSet, basename='circle')
 
 urlpatterns = [
-    path('circles/', list_circles)
+    path('', include(router.urls))
 ]
